@@ -1,0 +1,17 @@
+{
+    "name": "Project.Scripts.Runtime.Infrastructure",
+    "rootNamespace": "Project.Scripts.Runtime.Infrastructure",
+    "references": [
+        "GUID:cf511773879b2cf44942076d0c4fcfb8",
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

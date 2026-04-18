@@ -1,0 +1,20 @@
+{
+    "name": "Project.Scripts.Runtime.Composition",
+    "rootNamespace": "Project.Scripts.Runtime.Composition",
+    "references": [
+        "GUID:cf511773879b2cf44942076d0c4fcfb8",
+        "GUID:067236f26a362954aaffae620c58ee4c",
+        "GUID:4352d3083eabdee4bb5a7323296b6961",
+        "GUID:3ddb0b8d38baa8d4fa7c06a3f36d5a8b",
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
