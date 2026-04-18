@@ -26,7 +26,10 @@ namespace Project.Scripts.Runtime.Features.Player
         public PlayerViewLock ViewLock => _viewLock;
 
         [Inject]
-        public void Construct(IInputReader inputReader, ITimeProvider timeProvider)
+        public void Construct(
+            IInputReader inputReader,
+            ITimeProvider timeProvider,
+            IInteractionHintOutput interactionHintOutput)
         {
             _inputReader = inputReader ?? throw new ArgumentNullException(nameof(inputReader));
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
@@ -38,7 +41,8 @@ namespace Project.Scripts.Runtime.Features.Player
                 _camera,
                 new InteractionActor(_body, _camera, _viewLock),
                 _interactionSettings,
-                _viewLock);
+                _viewLock,
+                interactionHintOutput);
 
             _inputReader.MoveChanged += _motor.SetMoveInput;
             _inputReader.LookChanged += _look.SetLookInput;
@@ -51,6 +55,7 @@ namespace Project.Scripts.Runtime.Features.Player
         private void Update()
         {
             float deltaTime = _timeProvider.DeltaTime;
+            
             _inputReader.Read();
 
             _look.Tick();

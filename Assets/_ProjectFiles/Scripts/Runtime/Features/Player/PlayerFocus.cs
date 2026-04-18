@@ -10,21 +10,24 @@ namespace Project.Scripts.Runtime.Features.Player
         private readonly InteractionActor _actor;
         private readonly InteractionSettings _settings;
         private readonly PlayerViewLock _viewLock;
+        private readonly IInteractionHintOutput _hintOutput;
 
         private IInteractionTarget _target;
-        
+
         private float _deltaTime;
 
         public PlayerFocus(
             Transform viewPoint,
             InteractionActor actor,
             InteractionSettings settings,
-            PlayerViewLock viewLock)
+            PlayerViewLock viewLock,
+            IInteractionHintOutput hintOutput)
         {
             _viewPoint = viewPoint;
             _actor = actor;
             _settings = settings;
             _viewLock = viewLock;
+            _hintOutput = hintOutput;
         }
 
         public void Subscribe(IInputReader inputReader)
@@ -80,10 +83,19 @@ namespace Project.Scripts.Runtime.Features.Player
             if (Physics.Raycast(ray, out RaycastHit hit, _settings.Distance, _settings.TargetLayers) == false)
             {
                 _target = null;
+                _hintOutput.Hide();
                 return;
             }
 
             _target = hit.collider.GetComponentInParent<IInteractionTarget>();
+
+            if (_target == null || _target.CanInteract(_actor) == false)
+            {
+                _hintOutput.Hide();
+                return;
+            }
+
+            _hintOutput.Show(_target.GetHint(_actor));
         }
     }
 }
