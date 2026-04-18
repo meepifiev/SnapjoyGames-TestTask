@@ -2,6 +2,7 @@ using System;
 using Project.Scripts.Runtime.Core.Input;
 using Project.Scripts.Runtime.Core.Time;
 using Project.Scripts.Runtime.Features.Interaction.Common;
+using Project.Scripts.Runtime.Features.Interaction.Items;
 using UnityEngine;
 using VContainer;
 
@@ -29,7 +30,8 @@ namespace Project.Scripts.Runtime.Features.Player
         public void Construct(
             IInputReader inputReader,
             ITimeProvider timeProvider,
-            IInteractionHintOutput interactionHintOutput)
+            IInteractionHintOutput interactionHintOutput,
+            IItemInspectionOutput itemInspectionOutput)
         {
             _inputReader = inputReader ?? throw new ArgumentNullException(nameof(inputReader));
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
@@ -39,7 +41,7 @@ namespace Project.Scripts.Runtime.Features.Player
             _look = new PlayerLook(_body, _camera, _settings, _viewLock);
             _focus = new PlayerFocus(
                 _camera,
-                new InteractionActor(_body, _camera, _viewLock),
+                new InteractionActor(_body, _camera, _viewLock, itemInspectionOutput),
                 _interactionSettings,
                 _viewLock,
                 interactionHintOutput);
@@ -55,12 +57,12 @@ namespace Project.Scripts.Runtime.Features.Player
         private void Update()
         {
             float deltaTime = _timeProvider.DeltaTime;
-            
+
+            _focus.Tick(deltaTime);
             _inputReader.Read();
 
             _look.Tick();
             _motor.Tick(deltaTime);
-            _focus.Tick(deltaTime);
         }
 
         private void OnDestroy()

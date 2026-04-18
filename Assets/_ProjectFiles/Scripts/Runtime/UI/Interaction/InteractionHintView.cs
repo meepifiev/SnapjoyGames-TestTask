@@ -1,3 +1,4 @@
+using Project.Scripts.Runtime.UI.Common;
 using TMPro;
 using UnityEngine;
 
@@ -5,9 +6,9 @@ namespace Project.Scripts.Runtime.UI.Interaction
 {
     public class InteractionHintView : MonoBehaviour, IInteractionHintView
     {
-        [SerializeField] private CanvasGroup _root;
+        [SerializeField] private CanvasGroupVisibility _visibility;
         [SerializeField] private TMP_Text _text;
-        
+
         private void Awake()
         {
             Hide();
@@ -16,23 +17,13 @@ namespace Project.Scripts.Runtime.UI.Interaction
         public void Show(string text)
         {
             _text.text = text;
-            SetVisible(true);
+            _visibility.Show();
         }
 
         public void Hide()
         {
             _text.text = string.Empty;
-            SetVisible(false);
-        }
-
-        private void SetVisible(bool isVisible)
-        { 
-            const float VisibleAlpha = 1f;
-            const float HiddenAlpha = 0f;
-        
-            _root.alpha = isVisible ? VisibleAlpha : HiddenAlpha;
-            _root.interactable = isVisible;
-            _root.blocksRaycasts = isVisible;
+            _visibility.Hide();
         }
     }
 }

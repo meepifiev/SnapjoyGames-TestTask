@@ -47,6 +47,13 @@ namespace Project.Scripts.Runtime.Features.Player
         public void Tick(float deltaTime)
         {
             _deltaTime = deltaTime;
+
+            if (_viewLock.CanLook == false)
+            {
+                _hintOutput.Hide();
+                return;
+            }
+
             UpdateTarget();
         }
 
@@ -55,8 +62,6 @@ namespace Project.Scripts.Runtime.Features.Player
             if (_viewLock.CanInteract == false || _target == null || _target.CanInteract(_actor) == false)
                 return;
 
-            InteractionHint hint = _target.GetHint(_actor);
-            Debug.Log(hint.ActionText);
             _target.Press(_actor);
         }
 

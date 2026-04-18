@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: InteractionHintSettings
   m_EditorClassIdentifier: Project.Scripts.Runtime.UI::Project.Scripts.Runtime.UI.Interaction.InteractionHintSettings
   <InteractionKeyLabel>k__BackingField: '[E]'
-  <Separator>k__BackingField: '-'
+  <Separator>k__BackingField: ' - '
