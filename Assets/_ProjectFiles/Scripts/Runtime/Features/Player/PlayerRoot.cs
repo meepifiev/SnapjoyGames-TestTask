@@ -1,6 +1,7 @@
 using System;
 using Project.Scripts.Runtime.Core.Input;
 using Project.Scripts.Runtime.Core.Time;
+using Project.Scripts.Runtime.Features.Interaction.Common;
 using UnityEngine;
 using VContainer;
 
@@ -12,13 +13,15 @@ namespace Project.Scripts.Runtime.Features.Player
         [SerializeField] private Transform _body;
         [SerializeField] private Transform _camera;
         [SerializeField] private PlayerSettings _settings;
+        [SerializeField] private InteractionSettings _interactionSettings;
 
         private IInputReader _inputReader;
         private ITimeProvider _timeProvider;
-        
+
         private PlayerViewLock _viewLock;
         private PlayerMotor _motor;
         private PlayerLook _look;
+        private PlayerFocus _focus;
 
         public PlayerViewLock ViewLock => _viewLock;
 
@@ -31,25 +34,36 @@ namespace Project.Scripts.Runtime.Features.Player
             _viewLock = new PlayerViewLock();
             _motor = new PlayerMotor(_characterController, _body, _settings, _viewLock);
             _look = new PlayerLook(_body, _camera, _settings, _viewLock);
+            _focus = new PlayerFocus(
+                _camera,
+                new InteractionActor(_body, _camera, _viewLock),
+                _interactionSettings,
+                _viewLock);
 
             _inputReader.MoveChanged += _motor.SetMoveInput;
             _inputReader.LookChanged += _look.SetLookInput;
+
+            _focus.Subscribe(_inputReader);
 
             ApplyCursorState();
         }
 
         private void Update()
         {
+            float deltaTime = _timeProvider.DeltaTime;
             _inputReader.Read();
 
             _look.Tick();
-            _motor.Tick(_timeProvider.DeltaTime);
+            _motor.Tick(deltaTime);
+            _focus.Tick(deltaTime);
         }
 
         private void OnDestroy()
         {
             _inputReader.MoveChanged -= _motor.SetMoveInput;
             _inputReader.LookChanged -= _look.SetLookInput;
+
+            _focus.Unsubscribe(_inputReader);
         }
 
         private void ApplyCursorState()

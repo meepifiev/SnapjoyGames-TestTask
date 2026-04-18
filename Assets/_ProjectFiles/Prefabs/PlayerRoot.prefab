@@ -164,6 +164,7 @@ MonoBehaviour:
   _body: {fileID: 6978536446629952762}
   _camera: {fileID: 6730853820533520586}
   _settings: {fileID: 11400000, guid: e44765e511714c940af1bf46f39a03d4, type: 2}
+  _interactionSettings: {fileID: 11400000, guid: 0a34e598810451b429e8494364667d72, type: 2}
 --- !u!143 &2761798051392520685
 CharacterController:
   m_ObjectHideFlags: 0

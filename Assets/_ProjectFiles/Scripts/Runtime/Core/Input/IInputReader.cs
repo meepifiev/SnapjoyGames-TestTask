@@ -22,7 +22,7 @@ namespace Project.Scripts.Runtime.Core.Input
         Vector2 Look { get; }
         
         Vector2 PointerDelta { get; }
-        
+
         bool IsInteractionHeld { get; }
         bool IsPrimaryPointerHeld { get; }
 
