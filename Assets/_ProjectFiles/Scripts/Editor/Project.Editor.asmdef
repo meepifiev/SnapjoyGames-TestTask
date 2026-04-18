@@ -1,0 +1,14 @@
+{
+    "name": "Project.Scripts.Runtime.Editor",
+    "rootNamespace": "Project.Scripts.Runtime.Editor",
+    "references": [],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
