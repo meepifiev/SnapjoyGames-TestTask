@@ -3,12 +3,14 @@ using Project.Scripts.Runtime.Features.Interaction.Common;
 
 namespace Project.Scripts.Runtime.UI.Interaction
 {
-    public class InteractionHintPresenter : IInteractionHintOutput
+    public class InteractionHintPresenter
     {
         private readonly IInteractionHintView _view;
         private readonly InteractionHintSettings _settings;
 
-        public InteractionHintPresenter(IInteractionHintView view, InteractionHintSettings settings)
+        public InteractionHintPresenter(
+            IInteractionHintView view,
+            InteractionHintSettings settings)
         {
             _view = view ?? throw new ArgumentNullException(nameof(view));
             _settings = settings ?? throw new ArgumentNullException(nameof(settings));

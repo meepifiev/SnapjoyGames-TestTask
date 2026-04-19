@@ -3,7 +3,7 @@ using Project.Scripts.Runtime.Features.Interaction.Items;
 
 namespace Project.Scripts.Runtime.UI.Interaction.Items
 {
-    public class ItemInspectionPresenter : IItemInspectionOutput
+    public class ItemInspectionPresenter
     {
         private readonly IItemInspectionView _view;
 

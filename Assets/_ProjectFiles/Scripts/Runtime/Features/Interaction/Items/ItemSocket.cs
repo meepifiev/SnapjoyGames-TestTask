@@ -12,7 +12,6 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         private PickupItem _item;
 
         public Transform ItemHolder => _itemHolder;
-        public bool HasItem => _item != null;
 
         private void Awake()
         {
@@ -29,7 +28,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
 
         public bool CanInteract(InteractionActor actor)
         {
-            return HasItem == false &&
+            return _item == null &&
                    _settings != null &&
                    _itemHolder != null &&
                    actor.HeldItemSlot.HasItem &&

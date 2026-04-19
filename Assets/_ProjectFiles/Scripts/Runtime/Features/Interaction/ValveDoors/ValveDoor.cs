@@ -1,6 +1,7 @@
 using Project.Scripts.Runtime.Core.Time;
 using Project.Scripts.Runtime.Features.Interaction.Common;
 using UnityEngine;
+using VContainer;
 
 namespace Project.Scripts.Runtime.Features.Interaction.ValveDoors
 {
@@ -20,6 +21,12 @@ namespace Project.Scripts.Runtime.Features.Interaction.ValveDoors
         private bool _isReturning;
         
         private ITimeProvider _timeProvider;
+
+        [Inject]
+        private void Construct(ITimeProvider timeProvider)
+        {
+            _timeProvider = timeProvider;
+        }
 
         private void Awake()
         {
@@ -50,14 +57,12 @@ namespace Project.Scripts.Runtime.Features.Interaction.ValveDoors
 
         public void Hold(InteractionActor actor, float deltaTime)
         {
-            _timeProvider = actor.TimeProvider;
             _isReturning = false;
             Open(deltaTime);
         }
 
         public void Release(InteractionActor actor)
         {
-            _timeProvider = actor.TimeProvider;
             _isReturning = true;
         }
 

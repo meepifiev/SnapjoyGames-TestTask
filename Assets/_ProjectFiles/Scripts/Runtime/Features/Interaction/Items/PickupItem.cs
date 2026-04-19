@@ -1,6 +1,8 @@
 using DG.Tweening;
+using Project.Scripts.Runtime.Core.Input;
 using Project.Scripts.Runtime.Features.Interaction.Common;
 using UnityEngine;
+using VContainer;
 
 namespace Project.Scripts.Runtime.Features.Interaction.Items
 {
@@ -22,6 +24,8 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         
         private InspectableItemRotation _rotation;
         private IItemInspectionAnimation _inspectionAnimation;
+        private InteractionPipe _pipe;
+        private IInputReader _inputReader;
         
         private ItemSocket _socket;
 
@@ -32,6 +36,13 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         private void Awake()
         {
             _inspectionAnimation = GetComponentInChildren<IItemInspectionAnimation>();
+        }
+
+        [Inject]
+        private void Construct(InteractionPipe pipe, IInputReader inputReader)
+        {
+            _pipe = pipe;
+            _inputReader = inputReader;
         }
 
         private void OnDestroy()
@@ -77,10 +88,10 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         {
             _isInspecting = true;
             
-            actor.ViewLock.LockMovement();
-            actor.ViewLock.LockLook();
-            actor.Cursor.RequestVisible();
-            actor.ItemInspectionOutput.Show(_definition);
+            _pipe.LockMovement();
+            _pipe.LockLook();
+            _pipe.RequestCursorVisible();
+            _pipe.ShowItemInspection(_definition);
             
             SaveInitialPose();
             ReleaseSocket();
@@ -101,7 +112,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
             _isHeld = true;
             
             actor.HeldItemSlot.Hold(this);
-            actor.ItemInspectionOutput.Hide();
+            _pipe.HideItemInspection();
             
             DisableRotation();
             CloseInspectionAnimation();
@@ -165,9 +176,9 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
                 _definition.HeldSettings.LocalScale,
                 () =>
                 {
-                    actor.Cursor.ReleaseVisible();
-                    actor.ViewLock.UnlockLook();
-                    actor.ViewLock.UnlockMovement();
+                    _pipe.ReleaseCursorVisible();
+                    _pipe.UnlockLook();
+                    _pipe.UnlockMovement();
                 },
                 _definition.HeldSettings.TransitionDuration,
                 _definition.HeldSettings.TransitionEase);
@@ -249,7 +260,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
             _rotation = new InspectableItemRotation(
                 transform,
                 actor.ViewPoint,
-                actor.InputReader,
+                _inputReader,
                 _definition.InspectionSettings.RotationSpeed);
 
             _rotation.Enable();

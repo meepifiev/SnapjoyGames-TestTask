@@ -1142,6 +1142,7 @@ MonoBehaviour:
   autoRun: 1
   autoInjectGameObjects:
   - {fileID: 184612714}
+  - {fileID: 1805500508}
   _playerPrefabSettings: {fileID: 11400000, guid: 75cf57b4b23740b4c9fd70a6fdf41a02, type: 2}
   _playerSpawnPoint: {fileID: 782029721}
   _interactionHintSettings: {fileID: 11400000, guid: 5d34803bd58a2074cb880f49796d2ff7, type: 2}

@@ -1,5 +1,7 @@
+using System;
 using Project.Scripts.Runtime.Features.Interaction.Common;
 using UnityEngine;
+using VContainer;
 
 namespace Project.Scripts.Runtime.Features.Interaction.Dialogs
 {
@@ -8,9 +10,16 @@ namespace Project.Scripts.Runtime.Features.Interaction.Dialogs
         [SerializeField] private NpcDefinition _definition;
 
         private InteractionActor _actor;
+        private InteractionPipe _pipe;
         private DialogueSession _session;
         
         private bool _isActive;
+
+        [Inject]
+        private void Construct(InteractionPipe pipe)
+        {
+            _pipe = pipe ?? throw new ArgumentNullException(nameof(pipe));
+        }
 
         public InteractionHint GetHint(InteractionActor actor)
         {
@@ -33,10 +42,10 @@ namespace Project.Scripts.Runtime.Features.Interaction.Dialogs
             _session = new DialogueSession(_definition);
             _isActive = true;
 
-            _actor.ViewLock.LockMovement();
-            _actor.ViewLock.LockLook();
-            _actor.ViewLock.LockInteraction();
-            _actor.Cursor.RequestVisible();
+            _pipe.LockMovement();
+            _pipe.LockLook();
+            _pipe.LockInteraction();
+            _pipe.RequestCursorVisible();
 
             ShowCurrentNode();
         }
@@ -47,16 +56,16 @@ namespace Project.Scripts.Runtime.Features.Interaction.Dialogs
 
         private void ShowCurrentNode()
         {
-            _actor.DialogueOutput.Show(_session.CreateViewData(Finish, ShowCurrentNode));
+            _pipe.ShowDialogue(_session.CreateViewData(Finish, ShowCurrentNode));
         }
 
         private void Finish()
         {
-            _actor.DialogueOutput.Hide();
-            _actor.Cursor.ReleaseVisible();
-            _actor.ViewLock.UnlockInteraction();
-            _actor.ViewLock.UnlockLook();
-            _actor.ViewLock.UnlockMovement();
+            _pipe.HideDialogue();
+            _pipe.ReleaseCursorVisible();
+            _pipe.UnlockInteraction();
+            _pipe.UnlockLook();
+            _pipe.UnlockMovement();
 
             _session = null;
             _actor = null;

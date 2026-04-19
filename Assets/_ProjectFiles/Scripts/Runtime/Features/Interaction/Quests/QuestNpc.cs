@@ -1,8 +1,11 @@
+using System;
 using System.Collections.Generic;
 using Project.Scripts.Runtime.Features.Interaction.Common;
 using Project.Scripts.Runtime.Features.Interaction.Dialogs;
 using Project.Scripts.Runtime.Features.Interaction.Items;
 using UnityEngine;
+using VContainer;
+using Random = UnityEngine.Random;
 
 namespace Project.Scripts.Runtime.Features.Interaction.Quests
 {
@@ -17,12 +20,19 @@ namespace Project.Scripts.Runtime.Features.Interaction.Quests
         private readonly List<PickupItem> _candidateItems = new();
 
         private InteractionActor _actor;
+        private InteractionPipe _pipe;
         private PickupItem _requiredItem;
         private string _questDescription;
         private int _lineIndex;
         private bool _isDialogueActive;
         private bool _isQuestActive;
         private bool _isQuestCompleted;
+
+        [Inject]
+        private void Construct(InteractionPipe pipe)
+        {
+            _pipe = pipe ?? throw new ArgumentNullException(nameof(pipe));
+        }
 
         public InteractionHint GetHint(InteractionActor actor)
         {
@@ -64,10 +74,10 @@ namespace Project.Scripts.Runtime.Features.Interaction.Quests
             _lineIndex = FirstLineIndex;
             _isDialogueActive = true;
 
-            _actor.ViewLock.LockMovement();
-            _actor.ViewLock.LockLook();
-            _actor.ViewLock.LockInteraction();
-            _actor.Cursor.RequestVisible();
+            _pipe.LockMovement();
+            _pipe.LockLook();
+            _pipe.LockInteraction();
+            _pipe.RequestCursorVisible();
 
             ShowQuestLine();
         }
@@ -91,7 +101,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Quests
             
             _choices.Add(new DialogueChoiceViewData(choiceText, SelectQuestLine));
             
-            _actor.DialogueOutput.Show(new DialogueViewData(_definition.DisplayName, CreateCurrentLine(), _choices));
+            _pipe.ShowDialogue(new DialogueViewData(_definition.DisplayName, CreateCurrentLine(), _choices));
         }
 
         private void SelectQuestLine()
@@ -116,7 +126,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Quests
 
             _questDescription = CreateQuestDescription(_requiredItem);
             _isQuestActive = true;
-            _actor.QuestOutput.Show(new QuestViewData(_questDescription, false));
+            _pipe.ShowQuest(new QuestViewData(_questDescription, false));
 
             FinishDialogue();
         }
@@ -135,7 +145,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Quests
 
             _isQuestActive = false;
             _isQuestCompleted = true;
-            actor.QuestOutput.Show(new QuestViewData(_questDescription, true));
+            _pipe.ShowQuest(new QuestViewData(_questDescription, true));
 
             StartSingleLineDialogue(actor, _definition.CompleteLine);
         }
@@ -145,10 +155,10 @@ namespace Project.Scripts.Runtime.Features.Interaction.Quests
             _actor = actor;
             _isDialogueActive = true;
 
-            _actor.ViewLock.LockMovement();
-            _actor.ViewLock.LockLook();
-            _actor.ViewLock.LockInteraction();
-            _actor.Cursor.RequestVisible();
+            _pipe.LockMovement();
+            _pipe.LockLook();
+            _pipe.LockInteraction();
+            _pipe.RequestCursorVisible();
 
             ShowSingleLine(line, FinishDialogue);
         }
@@ -157,16 +167,16 @@ namespace Project.Scripts.Runtime.Features.Interaction.Quests
         {
             _choices.Clear();
             _choices.Add(new DialogueChoiceViewData(_definition.CloseChoiceText, close));
-            _actor.DialogueOutput.Show(new DialogueViewData(_definition.DisplayName, line, _choices));
+            _pipe.ShowDialogue(new DialogueViewData(_definition.DisplayName, line, _choices));
         }
 
         private void FinishDialogue()
         {
-            _actor.DialogueOutput.Hide();
-            _actor.Cursor.ReleaseVisible();
-            _actor.ViewLock.UnlockInteraction();
-            _actor.ViewLock.UnlockLook();
-            _actor.ViewLock.UnlockMovement();
+            _pipe.HideDialogue();
+            _pipe.ReleaseCursorVisible();
+            _pipe.UnlockInteraction();
+            _pipe.UnlockLook();
+            _pipe.UnlockMovement();
 
             _actor = null;
             _isDialogueActive = false;

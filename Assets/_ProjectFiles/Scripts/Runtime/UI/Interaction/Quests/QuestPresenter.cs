@@ -3,7 +3,7 @@ using Project.Scripts.Runtime.Features.Interaction.Quests;
 
 namespace Project.Scripts.Runtime.UI.Interaction.Quests
 {
-    public class QuestPresenter : IQuestOutput
+    public class QuestPresenter
     {
         private readonly IQuestView _view;
 
