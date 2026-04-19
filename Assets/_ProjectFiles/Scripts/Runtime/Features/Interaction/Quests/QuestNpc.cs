@@ -5,7 +5,6 @@ using Project.Scripts.Runtime.Features.Interaction.Dialogs;
 using Project.Scripts.Runtime.Features.Interaction.Items;
 using UnityEngine;
 using VContainer;
-using Random = UnityEngine.Random;
 
 namespace Project.Scripts.Runtime.Features.Interaction.Quests
 {
@@ -17,21 +16,25 @@ namespace Project.Scripts.Runtime.Features.Interaction.Quests
         [SerializeField] private QuestNpcDefinition _definition;
 
         private readonly List<DialogueChoiceViewData> _choices = new();
-        private readonly List<PickupItem> _candidateItems = new();
 
         private InteractionActor _actor;
-        private InteractionPipe _pipe;
+        
         private PickupItem _requiredItem;
+        
         private string _questDescription;
         private int _lineIndex;
         private bool _isDialogueActive;
         private bool _isQuestActive;
         private bool _isQuestCompleted;
+        
+        private InteractionPipe _pipe;
+        private IQuestItemSelector _itemSelector;
 
         [Inject]
-        private void Construct(InteractionPipe pipe)
+        private void Construct(InteractionPipe pipe, IQuestItemSelector itemSelector)
         {
             _pipe = pipe ?? throw new ArgumentNullException(nameof(pipe));
+            _itemSelector = itemSelector ?? throw new ArgumentNullException(nameof(itemSelector));
         }
 
         public InteractionHint GetHint(InteractionActor actor)
@@ -85,7 +88,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Quests
         private void ShowQuestLine()
         {
             if (IsLastLine() && _requiredItem == null)
-                _requiredItem = SelectRandomRequiredItem();
+                _requiredItem = _itemSelector.Select(_definition.ExcludedItemTypes);
 
             if (IsLastLine() && _requiredItem == null)
             {
@@ -180,47 +183,6 @@ namespace Project.Scripts.Runtime.Features.Interaction.Quests
 
             _actor = null;
             _isDialogueActive = false;
-        }
-
-        private PickupItem SelectRandomRequiredItem()
-        {
-            _candidateItems.Clear();
-
-            PickupItem[] items = FindObjectsByType<PickupItem>(FindObjectsInactive.Exclude, FindObjectsSortMode.None);
-
-            for (int itemIndex = 0; itemIndex < items.Length; itemIndex++)
-            {
-                PickupItem item = items[itemIndex];
-
-                if (CanBeRequiredItem(item))
-                    _candidateItems.Add(item);
-            }
-
-            if (_candidateItems.Count == 0)
-                return null;
-
-            return _candidateItems[Random.Range(0, _candidateItems.Count)];
-        }
-
-        private bool CanBeRequiredItem(PickupItem item)
-        {
-            return item != null &&
-                   item.Definition != null &&
-                   IsExcluded(item.Definition.Type) == false;
-        }
-
-        private bool IsExcluded(ItemType itemType)
-        {
-            if (_definition.ExcludedItemTypes == null)
-                return false;
-
-            foreach (ItemType type in _definition.ExcludedItemTypes)
-            {
-                if (type == itemType)
-                    return true;
-            }
-
-            return false;
         }
 
         private bool HasRequiredItem(InteractionActor actor)

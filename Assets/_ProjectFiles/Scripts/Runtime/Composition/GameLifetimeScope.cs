@@ -3,6 +3,7 @@ using Project.Scripts.Runtime.Core.Factory;
 using Project.Scripts.Runtime.Core.Input;
 using Project.Scripts.Runtime.Core.Time;
 using Project.Scripts.Runtime.Features.Interaction.Common;
+using Project.Scripts.Runtime.Features.Interaction.Quests;
 using Project.Scripts.Runtime.Features.Messages;
 using Project.Scripts.Runtime.Features.Player;
 using Project.Scripts.Runtime.Infrastructure.Controls;
@@ -82,6 +83,7 @@ namespace Project.Scripts.Runtime.Composition
         private void ConfigureInteraction(IContainerBuilder builder)
         {
             builder.Register<InteractionPipe>(Lifetime.Scoped);
+            builder.Register<IQuestItemSelector, SceneQuestItemSelector>(Lifetime.Scoped);
         }
 
         private void ConfigurePlayer(IContainerBuilder builder)
