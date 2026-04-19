@@ -4,6 +4,10 @@
 
 Проект рассчитан на Unity `6000.2.6f2`.
 
+## Демонстрация
+
+[Открыть на Яндекс.Диске](https://disk.yandex.ru/i/ouijjKnfOOBshA)
+
 ## Архитектурный Подход
 
 Код организован по функциональному принципу в `Assets/_ProjectFiles/Scripts/Runtime`.
