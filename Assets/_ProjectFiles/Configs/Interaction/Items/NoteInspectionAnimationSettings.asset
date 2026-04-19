@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: deedeebf0f8c43509e7c46106a5a0c37, type: 3}
+  m_Name: NoteInspectionAnimationSettings
+  m_EditorClassIdentifier: Project.Scripts.Runtime.Features::Project.Scripts.Runtime.Features.Interaction.Items.NoteInspectionAnimationSettings
+  <LeftPageOpenLocalEulerAngles>k__BackingField: {x: 100, y: 0, z: 0}
+  <RightPageOpenLocalEulerAngles>k__BackingField: {x: -100, y: 0, z: 0}
+  <Duration>k__BackingField: 0.35
+  <Ease>k__BackingField: 6

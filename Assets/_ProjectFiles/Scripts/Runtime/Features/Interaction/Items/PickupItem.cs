@@ -25,11 +25,17 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         private Tween _transitionTween;
         
         private InspectableItemRotation _rotation;
+        private IItemInspectionAnimation _inspectionAnimation;
         
         private ItemSocket _socket;
 
         public ItemDefinition Definition => _definition;
         public bool CanPlaceInSocket => _isHeld && _isTransitioning == false;
+
+        private void Awake()
+        {
+            _inspectionAnimation = GetComponentInChildren<IItemInspectionAnimation>();
+        }
 
         private void OnDestroy()
         {
@@ -89,7 +95,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
             SetInspectionRigidbodyState();
             
             EnableRotation(actor);
-            MoveToInspectionPose(actor.ItemInspectionHolder);
+            MoveToInspectionPose(actor.ItemInspectionHolder, OpenInspectionAnimation);
         }
 
         private void PickUp(InteractionActor actor)
@@ -104,6 +110,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
             actor.ItemInspectionOutput.Hide();
             
             DisableRotation();
+            CloseInspectionAnimation();
             MoveToHeldPose(actor);
         }
 
@@ -133,6 +140,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
             _transitionTween?.Kill();
             DisableRotation();
             ReleaseSocket();
+            CloseInspectionAnimation();
 
             Destroy(gameObject);
         }
@@ -145,7 +153,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
             _initialLocalScale = transform.localScale;
         }
 
-        private void MoveToInspectionPose(Transform itemInspectionHolder)
+        private void MoveToInspectionPose(Transform itemInspectionHolder, TweenCallback onComplete)
         {
             transform.SetParent(itemInspectionHolder, true);
 
@@ -153,7 +161,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
                 Vector3.zero,
                 Quaternion.Euler(_definition.InspectionSettings.LocalEulerAngles),
                 _definition.InspectionSettings.LocalScale,
-                null);
+                onComplete);
         }
 
         private void MoveToInitialPose(InteractionActor actor)
@@ -248,12 +256,16 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         {
             _rigidbody.isKinematic = true;
             _rigidbody.useGravity = false;
+            _rigidbody.interpolation = RigidbodyInterpolation.None;
+            _rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
         }
 
         private void RestoreRigidbodyState()
         {
             _rigidbody.isKinematic = _initialIsKinematic;
             _rigidbody.useGravity = _initialUseGravity;
+            _rigidbody.interpolation = RigidbodyInterpolation.Interpolate;
+            _rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
         }
 
         private void EnableRotation(InteractionActor actor)
@@ -271,6 +283,16 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         {
             _rotation?.Disable();
             _rotation = null;
+        }
+
+        private void OpenInspectionAnimation()
+        {
+            _inspectionAnimation?.Open();
+        }
+
+        private void CloseInspectionAnimation()
+        {
+            _inspectionAnimation?.Close();
         }
 
         private void ReleaseSocket()
