@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 469c4295f1944a9bba848c2d2d674340, type: 3}
+  m_Name: ValveDoorSettings
+  m_EditorClassIdentifier: Project.Scripts.Runtime.Features::Project.Scripts.Runtime.Features.Interaction.ValveDoors.ValveDoorSettings
+  <RotateInteractionText>k__BackingField: "\u041A\u0440\u0443\u0442\u0438\u0442\u044C"
+  <MotionSettings>k__BackingField:
+    _valveRotationAxis: {x: 0, y: 0, z: 1}
+    _maxValveAngle: 180
+    _openingSpeed: 120
+    _returnSpeed: 180
+    _doorOpenLocalOffset: {x: 0, y: 5, z: 0}

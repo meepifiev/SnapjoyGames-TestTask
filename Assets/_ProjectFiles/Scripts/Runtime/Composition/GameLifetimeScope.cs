@@ -1,10 +1,14 @@
 using Project.Scripts.Runtime.Core.Factory;
 using Project.Scripts.Runtime.Core.Input;
 using Project.Scripts.Runtime.Core.Time;
+using Project.Scripts.Runtime.Features.Interaction.Common;
+using Project.Scripts.Runtime.Features.Interaction.Items;
 using Project.Scripts.Runtime.Features.Player;
 using Project.Scripts.Runtime.Infrastructure.Controls;
 using Project.Scripts.Runtime.Infrastructure.Factory;
 using Project.Scripts.Runtime.Infrastructure.Time;
+using Project.Scripts.Runtime.UI.Interaction;
+using Project.Scripts.Runtime.UI.Interaction.Items;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -17,11 +21,17 @@ namespace Project.Scripts.Runtime.Composition
         [SerializeField] private PlayerPrefabSettings _playerPrefabSettings;
         [SerializeField] private PlayerSpawnPoint _playerSpawnPoint;
 
+        [Header("UI")]
+        [SerializeField] private InteractionHintSettings _interactionHintSettings;
+        [SerializeField] private InteractionHintView _interactionHintView;
+        [SerializeField] private ItemInspectionView _itemInspectionView;
+
         protected override void Configure(IContainerBuilder builder)
         {
             ConfigureInfrastructure(builder);
             ConfigureFactories(builder);
             ConfigurePlayer(builder);
+            ConfigureUI(builder);
             ConfigureEntryPoints(builder);
         }
 
@@ -41,6 +51,15 @@ namespace Project.Scripts.Runtime.Composition
             builder.RegisterInstance(_playerPrefabSettings);
             builder.RegisterComponent(_playerSpawnPoint);
             builder.Register<PlayerSpawner>(Lifetime.Scoped);
+        }
+
+        private void ConfigureUI(IContainerBuilder builder)
+        {
+            builder.RegisterInstance(_interactionHintSettings);
+            builder.RegisterComponent(_interactionHintView).As<IInteractionHintView>();
+            builder.Register<InteractionHintPresenter>(Lifetime.Scoped).As<IInteractionHintOutput>();
+            builder.RegisterComponent(_itemInspectionView).As<IItemInspectionView>();
+            builder.Register<ItemInspectionPresenter>(Lifetime.Scoped).As<IItemInspectionOutput>();
         }
 
         private void ConfigureEntryPoints(IContainerBuilder builder)

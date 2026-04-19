@@ -1,7 +1,12 @@
 {
     "name": "Project.Scripts.Runtime.UI",
     "rootNamespace": "Project.Scripts.Runtime.UI",
-    "references": [],
+    "references": [
+        "GUID:cf511773879b2cf44942076d0c4fcfb8",
+        "GUID:067236f26a362954aaffae620c58ee4c",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:2bafac87e7f4b9b418d9448d219b01ab"
+    ],
     "includePlatforms": [],
     "excludePlatforms": [],
     "allowUnsafeCode": false,
