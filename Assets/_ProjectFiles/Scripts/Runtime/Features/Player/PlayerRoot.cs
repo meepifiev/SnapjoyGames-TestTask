@@ -27,8 +27,6 @@ namespace Project.Scripts.Runtime.Features.Player
         private PlayerFocus _focus;
         private HeldItemSlot _heldItemSlot;
 
-        public PlayerViewLock ViewLock => _viewLock;
-
         [Inject]
         public void Construct(
             IInputReader inputReader,

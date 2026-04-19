@@ -164,22 +164,6 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
                 onComplete);
         }
 
-        private void MoveToInitialPose(InteractionActor actor)
-        {
-            transform.SetParent(_initialParent, true);
-
-            PlayTransition(
-                _initialLocalPosition,
-                _initialLocalRotation,
-                _initialLocalScale,
-                () =>
-                {
-                    RestoreRigidbodyState();
-                    actor.ViewLock.UnlockLook();
-                    actor.ViewLock.UnlockMovement();
-                });
-        }
-
         private void MoveToHeldPose(InteractionActor actor)
         {
             transform.SetParent(actor.HeldItemHolder, true);

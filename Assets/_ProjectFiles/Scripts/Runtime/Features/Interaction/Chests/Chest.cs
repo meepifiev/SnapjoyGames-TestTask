@@ -31,10 +31,6 @@ namespace Project.Scripts.Runtime.Features.Interaction.Chests
         {
             return _isOpen == false &&
                    _isTransitioning == false &&
-                   _settings != null &&
-                   _settings.RequiredItem != null &&
-                   _settings.LidSettings != null &&
-                   _lid != null &&
                    HasAvailableInteractionText(actor);
         }
 
@@ -76,7 +72,6 @@ namespace Project.Scripts.Runtime.Features.Interaction.Chests
         private bool HasRequiredItem(InteractionActor actor)
         {
             return actor.HeldItemSlot.HasItem &&
-                   actor.HeldItemSlot.Item.Definition != null &&
                    actor.HeldItemSlot.Item.Definition == _settings.RequiredItem;
         }
 
