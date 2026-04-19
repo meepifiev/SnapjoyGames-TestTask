@@ -32,17 +32,17 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         public ItemDefinition Definition => _definition;
         
         public bool CanPlaceInSocket => _isHeld && _isTransitioning == false;
-
-        private void Awake()
-        {
-            _inspectionAnimation = GetComponentInChildren<IItemInspectionAnimation>();
-        }
-
+        
         [Inject]
         private void Construct(InteractionPipe pipe, IInputReader inputReader)
         {
             _pipe = pipe;
             _inputReader = inputReader;
+        }
+
+        private void Awake()
+        {
+            _inspectionAnimation = GetComponentInChildren<IItemInspectionAnimation>();
         }
 
         private void OnDestroy()

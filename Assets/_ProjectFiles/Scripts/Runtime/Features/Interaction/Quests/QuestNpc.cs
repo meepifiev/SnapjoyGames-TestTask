@@ -163,7 +163,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Quests
             ShowSingleLine(line, FinishDialogue);
         }
 
-        private void ShowSingleLine(string line, System.Action close)
+        private void ShowSingleLine(string line, Action close)
         {
             _choices.Clear();
             _choices.Add(new DialogueChoiceViewData(_definition.CloseChoiceText, close));

@@ -47,13 +47,9 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
             item.PlaceToSocket(this);
         }
 
-        public void Hold(InteractionActor actor, float deltaTime)
-        {
-        }
+        public void Hold(InteractionActor actor, float deltaTime) { }
 
-        public void Release(InteractionActor actor)
-        {
-        }
+        public void Release(InteractionActor actor) { }
 
         public void Place(PickupItem item)
         {
