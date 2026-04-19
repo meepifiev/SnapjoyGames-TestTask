@@ -54,6 +54,7 @@ namespace Project.Scripts.Runtime.Features.Player
                     _heldItemSlot,
                     _viewLock,
                     _inputReader,
+                    _timeProvider,
                     itemInspectionOutput),
                 _interactionSettings,
                 _viewLock,

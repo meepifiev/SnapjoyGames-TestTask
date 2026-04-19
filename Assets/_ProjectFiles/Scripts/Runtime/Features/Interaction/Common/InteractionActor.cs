@@ -1,4 +1,5 @@
 using Project.Scripts.Runtime.Core.Input;
+using Project.Scripts.Runtime.Core.Time;
 using Project.Scripts.Runtime.Features.Interaction.Items;
 using Project.Scripts.Runtime.Features.Player;
 using UnityEngine;
@@ -15,6 +16,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Common
             HeldItemSlot heldItemSlot,
             PlayerViewLock viewLock,
             IInputReader inputReader,
+            ITimeProvider timeProvider,
             IItemInspectionOutput itemInspectionOutput)
         {
             Transform = transform;
@@ -24,6 +26,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Common
             HeldItemSlot = heldItemSlot;
             ViewLock = viewLock;
             InputReader = inputReader;
+            TimeProvider = timeProvider;
             ItemInspectionOutput = itemInspectionOutput;
         }
 
@@ -34,6 +37,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Common
         public HeldItemSlot HeldItemSlot { get; }
         public PlayerViewLock ViewLock { get; }
         public IInputReader InputReader { get; }
+        public ITimeProvider TimeProvider { get; }
         public IItemInspectionOutput ItemInspectionOutput { get; }
     }
 }

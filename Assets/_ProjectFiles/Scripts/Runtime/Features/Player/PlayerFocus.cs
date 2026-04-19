@@ -87,19 +87,21 @@ namespace Project.Scripts.Runtime.Features.Player
 
             if (Physics.Raycast(ray, out RaycastHit hit, _settings.Distance, _settings.TargetLayers) == false)
             {
-                _target = null;
+                SetTarget(null);
                 _hintOutput.Hide();
                 return;
             }
 
-            _target = hit.collider.GetComponentInParent<IInteractionTarget>();
+            IInteractionTarget target = hit.collider.GetComponentInParent<IInteractionTarget>();
 
-            if (_target == null || _target.CanInteract(_actor) == false)
+            if (target == null || target.CanInteract(_actor) == false)
             {
+                SetTarget(null);
                 _hintOutput.Hide();
                 return;
             }
 
+            SetTarget(target);
             _hintOutput.Show(_target.GetHint(_actor));
         }
 
@@ -112,6 +114,15 @@ namespace Project.Scripts.Runtime.Features.Player
             }
 
             _hintOutput.Show(_target.GetHint(_actor));
+        }
+
+        private void SetTarget(IInteractionTarget target)
+        {
+            if (_target == target)
+                return;
+
+            _target?.Release(_actor);
+            _target = target;
         }
     }
 }
