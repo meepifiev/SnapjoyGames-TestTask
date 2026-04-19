@@ -14,6 +14,7 @@ namespace Project.Scripts.Runtime.Features.Player
         [SerializeField] private Transform _body;
         [SerializeField] private Transform _camera;
         [SerializeField] private Transform _itemInspectionHolder;
+        [SerializeField] private Transform _heldItemHolder;
         [SerializeField] private PlayerSettings _settings;
         [SerializeField] private InteractionSettings _interactionSettings;
 
@@ -24,6 +25,7 @@ namespace Project.Scripts.Runtime.Features.Player
         private PlayerMotor _motor;
         private PlayerLook _look;
         private PlayerFocus _focus;
+        private HeldItemSlot _heldItemSlot;
 
         public PlayerViewLock ViewLock => _viewLock;
 
@@ -38,11 +40,20 @@ namespace Project.Scripts.Runtime.Features.Player
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
 
             _viewLock = new PlayerViewLock();
+            _heldItemSlot = new HeldItemSlot();
             _motor = new PlayerMotor(_characterController, _body, _settings, _viewLock);
             _look = new PlayerLook(_body, _camera, _settings, _viewLock);
             _focus = new PlayerFocus(
                 _camera,
-                new InteractionActor(_body, _camera, _itemInspectionHolder, _viewLock, _inputReader, itemInspectionOutput),
+                new InteractionActor(
+                    _body,
+                    _camera,
+                    _itemInspectionHolder,
+                    _heldItemHolder,
+                    _heldItemSlot,
+                    _viewLock,
+                    _inputReader,
+                    itemInspectionOutput),
                 _interactionSettings,
                 _viewLock,
                 interactionHintOutput);

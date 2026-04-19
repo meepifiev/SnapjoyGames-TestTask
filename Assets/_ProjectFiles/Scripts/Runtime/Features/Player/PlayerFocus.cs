@@ -50,7 +50,7 @@ namespace Project.Scripts.Runtime.Features.Player
 
             if (_viewLock.CanLook == false)
             {
-                _hintOutput.Hide();
+                UpdateLockedTargetHint();
                 return;
             }
 
@@ -94,6 +94,17 @@ namespace Project.Scripts.Runtime.Features.Player
 
             _target = hit.collider.GetComponentInParent<IInteractionTarget>();
 
+            if (_target == null || _target.CanInteract(_actor) == false)
+            {
+                _hintOutput.Hide();
+                return;
+            }
+
+            _hintOutput.Show(_target.GetHint(_actor));
+        }
+
+        private void UpdateLockedTargetHint()
+        {
             if (_target == null || _target.CanInteract(_actor) == false)
             {
                 _hintOutput.Hide();

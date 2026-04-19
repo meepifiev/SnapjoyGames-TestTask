@@ -224,6 +224,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Project.Scripts.Runtime.Features::Project.Scripts.Runtime.Features.Interaction.Testing.TestInteractionTarget
   _definition: {fileID: 11400000, guid: c25bf8cc56812a94bb14b9fea31f3c3d, type: 2}
+  _rigidbody: {fileID: 190907976}
 --- !u!65 &190907972
 BoxCollider:
   m_ObjectHideFlags: 0

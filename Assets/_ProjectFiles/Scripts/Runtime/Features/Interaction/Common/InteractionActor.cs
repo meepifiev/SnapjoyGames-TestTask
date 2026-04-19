@@ -11,6 +11,8 @@ namespace Project.Scripts.Runtime.Features.Interaction.Common
             Transform transform,
             Transform viewPoint,
             Transform itemInspectionHolder,
+            Transform heldItemHolder,
+            HeldItemSlot heldItemSlot,
             PlayerViewLock viewLock,
             IInputReader inputReader,
             IItemInspectionOutput itemInspectionOutput)
@@ -18,6 +20,8 @@ namespace Project.Scripts.Runtime.Features.Interaction.Common
             Transform = transform;
             ViewPoint = viewPoint;
             ItemInspectionHolder = itemInspectionHolder;
+            HeldItemHolder = heldItemHolder;
+            HeldItemSlot = heldItemSlot;
             ViewLock = viewLock;
             InputReader = inputReader;
             ItemInspectionOutput = itemInspectionOutput;
@@ -26,6 +30,8 @@ namespace Project.Scripts.Runtime.Features.Interaction.Common
         public Transform Transform { get; }
         public Transform ViewPoint { get; }
         public Transform ItemInspectionHolder { get; }
+        public Transform HeldItemHolder { get; }
+        public HeldItemSlot HeldItemSlot { get; }
         public PlayerViewLock ViewLock { get; }
         public IInputReader InputReader { get; }
         public IItemInspectionOutput ItemInspectionOutput { get; }

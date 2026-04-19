@@ -11,6 +11,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
 
         private bool _isInspecting;
         private bool _isTransitioning;
+        private bool _isHeld;
 
         private Transform _initialParent;
 
@@ -34,14 +35,21 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
 
         public InteractionHint GetHint(InteractionActor actor)
         {
+            if (_isInspecting)
+                return new InteractionHint(_definition.TakeInteractionText);
+
             return new InteractionHint(_definition.InteractionText);
         }
 
         public bool CanInteract(InteractionActor actor)
         {
             return _definition != null &&
+                   _rigidbody != null &&
                    _definition.InspectionSettings != null &&
-                   string.IsNullOrWhiteSpace(_definition.InteractionText) == false;
+                   _definition.HeldSettings != null &&
+                   _isHeld == false &&
+                   (_isInspecting || actor.HeldItemSlot.HasItem == false) &&
+                   HasAvailableInteractionText();
         }
 
         public void Press(InteractionActor actor)
@@ -51,7 +59,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
 
             if (_isInspecting)
             {
-                StopInspection(actor);
+                PickUp(actor);
                 return;
             }
 
@@ -79,12 +87,17 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
             MoveToInspectionPose(actor.ItemInspectionHolder);
         }
 
-        private void StopInspection(InteractionActor actor)
+        private void PickUp(InteractionActor actor)
         {
+            if (actor.HeldItemSlot.CanHold(this) == false)
+                return;
+
             _isInspecting = false;
+            _isHeld = true;
+            actor.HeldItemSlot.Hold(this);
             actor.ItemInspectionOutput.Hide();
             DisableRotation();
-            MoveToInitialPose(actor);
+            MoveToHeldPose(actor);
         }
 
         private void SaveInitialPose()
@@ -122,20 +135,54 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
                 });
         }
 
+        private void MoveToHeldPose(InteractionActor actor)
+        {
+            transform.SetParent(actor.HeldItemHolder, true);
+
+            PlayTransition(
+                Vector3.zero,
+                Quaternion.Euler(_definition.HeldSettings.LocalEulerAngles),
+                _definition.HeldSettings.LocalScale,
+                () =>
+                {
+                    actor.ViewLock.UnlockLook();
+                    actor.ViewLock.UnlockMovement();
+                },
+                _definition.HeldSettings.TransitionDuration,
+                _definition.HeldSettings.TransitionEase);
+        }
+
         private void PlayTransition(
             Vector3 localPosition,
             Quaternion localRotation,
             Vector3 localScale,
             TweenCallback onComplete)
         {
+            PlayTransition(
+                localPosition,
+                localRotation,
+                localScale,
+                onComplete,
+                _definition.InspectionSettings.TransitionDuration,
+                _definition.InspectionSettings.TransitionEase);
+        }
+
+        private void PlayTransition(
+            Vector3 localPosition,
+            Quaternion localRotation,
+            Vector3 localScale,
+            TweenCallback onComplete,
+            float duration,
+            Ease ease)
+        {
             _transitionTween?.Kill();
             _isTransitioning = true;
 
             _transitionTween = DOTween.Sequence()
-                .Join(transform.DOLocalMove(localPosition, _definition.InspectionSettings.TransitionDuration))
-                .Join(transform.DOLocalRotateQuaternion(localRotation, _definition.InspectionSettings.TransitionDuration))
-                .Join(transform.DOScale(localScale, _definition.InspectionSettings.TransitionDuration))
-                .SetEase(_definition.InspectionSettings.TransitionEase)
+                .Join(transform.DOLocalMove(localPosition, duration))
+                .Join(transform.DOLocalRotateQuaternion(localRotation, duration))
+                .Join(transform.DOScale(localScale, duration))
+                .SetEase(ease)
                 .OnComplete(() =>
                 {
                     _isTransitioning = false;
@@ -176,6 +223,14 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         {
             _rotation?.Disable();
             _rotation = null;
+        }
+
+        private bool HasAvailableInteractionText()
+        {
+            if (_isInspecting)
+                return string.IsNullOrWhiteSpace(_definition.TakeInteractionText) == false;
+
+            return string.IsNullOrWhiteSpace(_definition.InteractionText) == false;
         }
     }
 }
