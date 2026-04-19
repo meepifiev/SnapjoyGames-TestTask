@@ -128,6 +128,15 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
             _socket = null;
         }
 
+        public void Consume()
+        {
+            _transitionTween?.Kill();
+            DisableRotation();
+            ReleaseSocket();
+
+            Destroy(gameObject);
+        }
+
         private void SaveInitialPose()
         {
             _initialParent = transform.parent;
