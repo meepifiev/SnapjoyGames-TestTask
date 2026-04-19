@@ -13,6 +13,7 @@ namespace Project.Scripts.Runtime.Features.Player
         [SerializeField] private CharacterController _characterController;
         [SerializeField] private Transform _body;
         [SerializeField] private Transform _camera;
+        [SerializeField] private Transform _itemInspectionHolder;
         [SerializeField] private PlayerSettings _settings;
         [SerializeField] private InteractionSettings _interactionSettings;
 
@@ -41,7 +42,7 @@ namespace Project.Scripts.Runtime.Features.Player
             _look = new PlayerLook(_body, _camera, _settings, _viewLock);
             _focus = new PlayerFocus(
                 _camera,
-                new InteractionActor(_body, _camera, _viewLock, itemInspectionOutput),
+                new InteractionActor(_body, _camera, _itemInspectionHolder, _viewLock, _inputReader, itemInspectionOutput),
                 _interactionSettings,
                 _viewLock,
                 interactionHintOutput);

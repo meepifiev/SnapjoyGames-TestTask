@@ -3,7 +3,8 @@
     "rootNamespace": "Project.Scripts.Runtime.Features",
     "references": [
         "GUID:cf511773879b2cf44942076d0c4fcfb8",
-        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc"
+        "GUID:b0214a6008ed146ff8f122a6a9c2f6cc",
+        "GUID:a811bde74b26b53498b4f6d872b09b6d"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

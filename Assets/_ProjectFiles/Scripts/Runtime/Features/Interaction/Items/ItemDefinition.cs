@@ -12,5 +12,8 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         [field: SerializeField] public string DisplayName { get; private set; }
         [field: SerializeField, TextArea] public string Description { get; private set; }
         [field: SerializeField] public string InteractionText { get; private set; }
+
+        [field: Header("Inspection")]
+        [field: SerializeField] public ItemInspectionSettings InspectionSettings { get; private set; }
     }
 }
