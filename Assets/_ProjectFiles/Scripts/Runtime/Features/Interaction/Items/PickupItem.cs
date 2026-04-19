@@ -25,8 +25,11 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         private Tween _transitionTween;
         
         private InspectableItemRotation _rotation;
+        
+        private ItemSocket _socket;
 
         public ItemDefinition Definition => _definition;
+        public bool CanPlaceInSocket => _isHeld && _isTransitioning == false;
 
         private void OnDestroy()
         {
@@ -80,6 +83,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
             actor.ItemInspectionOutput.Show(_definition);
             
             SaveInitialPose();
+            ReleaseSocket();
             
             SaveRigidbodyState();
             SetInspectionRigidbodyState();
@@ -101,6 +105,27 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
             
             DisableRotation();
             MoveToHeldPose(actor);
+        }
+
+        public void PlaceToSocket(ItemSocket socket)
+        {
+            _isHeld = false;
+            socket.Place(this);
+
+            MoveToSocketPose(socket);
+        }
+
+        public void AttachToSocket(ItemSocket socket)
+        {
+            _socket = socket;
+        }
+
+        public void DetachFromSocket(ItemSocket socket)
+        {
+            if (_socket != socket)
+                return;
+
+            _socket = null;
         }
 
         private void SaveInitialPose()
@@ -153,6 +178,17 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
                 },
                 _definition.HeldSettings.TransitionDuration,
                 _definition.HeldSettings.TransitionEase);
+        }
+
+        private void MoveToSocketPose(ItemSocket socket)
+        {
+            transform.SetParent(socket.ItemHolder, true);
+
+            PlayTransition(
+                Vector3.zero,
+                Quaternion.identity,
+                _initialLocalScale,
+                RestoreRigidbodyState);
         }
 
         private void PlayTransition(
@@ -226,6 +262,11 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         {
             _rotation?.Disable();
             _rotation = null;
+        }
+
+        private void ReleaseSocket()
+        {
+            _socket?.Release(this);
         }
 
         private bool HasAvailableInteractionText()
