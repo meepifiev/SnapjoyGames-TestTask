@@ -14,5 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: Project.Scripts.Runtime.Features::Project.Scripts.Runtime.Features.Interaction.Items.NoteInspectionAnimationSettings
   <LeftPageOpenLocalEulerAngles>k__BackingField: {x: 100, y: 0, z: 0}
   <RightPageOpenLocalEulerAngles>k__BackingField: {x: -100, y: 0, z: 0}
-  <Duration>k__BackingField: 0.35
+  <Duration>k__BackingField: 3
   <Ease>k__BackingField: 6

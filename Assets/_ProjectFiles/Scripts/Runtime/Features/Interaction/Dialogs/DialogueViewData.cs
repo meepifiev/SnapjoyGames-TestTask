@@ -13,6 +13,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Dialogs
 
         public string SpeakerName { get; }
         public string Line { get; }
+        
         public IReadOnlyList<DialogueChoiceViewData> Choices { get; }
     }
 }

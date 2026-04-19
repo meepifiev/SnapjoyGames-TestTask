@@ -1,10 +1,10 @@
+using MessagePipe;
 using Project.Scripts.Runtime.Core.Factory;
 using Project.Scripts.Runtime.Core.Input;
 using Project.Scripts.Runtime.Core.Time;
 using Project.Scripts.Runtime.Features.Interaction.Common;
-using Project.Scripts.Runtime.Features.Interaction.Dialogs;
-using Project.Scripts.Runtime.Features.Interaction.Items;
 using Project.Scripts.Runtime.Features.Interaction.Quests;
+using Project.Scripts.Runtime.Features.Messages;
 using Project.Scripts.Runtime.Features.Player;
 using Project.Scripts.Runtime.Infrastructure.Controls;
 using Project.Scripts.Runtime.Infrastructure.Factory;
@@ -34,22 +34,56 @@ namespace Project.Scripts.Runtime.Composition
 
         protected override void Configure(IContainerBuilder builder)
         {
-            ConfigureInfrastructure(builder);
+            ConfigureMessagePipe(builder);
+            ConfigureInput(builder);
+            ConfigureTimeProvider(builder);
             ConfigureFactories(builder);
+            ConfigureInteraction(builder);
             ConfigurePlayer(builder);
             ConfigureUI(builder);
             ConfigureEntryPoints(builder);
         }
 
-        private void ConfigureInfrastructure(IContainerBuilder builder)
+        private void ConfigureInput(IContainerBuilder builder)
         {
             builder.Register<IInputReader, InputReader>(Lifetime.Scoped);
+        }
+
+        private void ConfigureTimeProvider(IContainerBuilder builder)
+        {
             builder.Register<ITimeProvider, TimeProvider>(Lifetime.Scoped);
         }
 
         private void ConfigureFactories(IContainerBuilder builder)
         {
             builder.Register<IObjectFactory, ObjectFactory>(Lifetime.Scoped);
+        }
+
+        private void ConfigureMessagePipe(IContainerBuilder builder)
+        {
+            MessagePipeOptions options = builder.RegisterMessagePipe();
+
+            builder.RegisterMessageBroker<M_ItemInspectionShown>(options);
+            builder.RegisterMessageBroker<M_ItemInspectionHidden>(options);
+            
+            builder.RegisterMessageBroker<M_InteractionHintShown>(options);
+            builder.RegisterMessageBroker<M_InteractionHintHidden>(options);
+            
+            builder.RegisterMessageBroker<M_DialogueShown>(options);
+            builder.RegisterMessageBroker<M_DialogueHidden>(options);
+            
+            builder.RegisterMessageBroker<M_QuestShown>(options);
+            
+            builder.RegisterMessageBroker<M_PlayerMovementLockChanged>(options);
+            builder.RegisterMessageBroker<M_PlayerLookLockChanged>(options);
+            builder.RegisterMessageBroker<M_PlayerInteractionLockChanged>(options);
+            builder.RegisterMessageBroker<M_PlayerCursorVisibilityChanged>(options);
+        }
+
+        private void ConfigureInteraction(IContainerBuilder builder)
+        {
+            builder.Register<InteractionPipe>(Lifetime.Scoped);
+            builder.Register<IQuestItemSelector, SceneQuestItemSelector>(Lifetime.Scoped);
         }
 
         private void ConfigurePlayer(IContainerBuilder builder)
@@ -62,22 +96,28 @@ namespace Project.Scripts.Runtime.Composition
         private void ConfigureUI(IContainerBuilder builder)
         {
             builder.RegisterInstance(_interactionHintSettings);
-            
+
             builder.RegisterComponent(_interactionHintView).As<IInteractionHintView>();
-            builder.Register<InteractionHintPresenter>(Lifetime.Scoped).As<IInteractionHintOutput>();
-            
+            builder.Register<InteractionHintPresenter>(Lifetime.Scoped);
+
             builder.RegisterComponent(_itemInspectionView).As<IItemInspectionView>();
-            builder.Register<ItemInspectionPresenter>(Lifetime.Scoped).As<IItemInspectionOutput>();
-            
+            builder.Register<ItemInspectionPresenter>(Lifetime.Scoped);
+
             builder.RegisterComponent(_dialogueView).As<IDialogueView>();
-            builder.Register<DialoguePresenter>(Lifetime.Scoped).As<IDialogueOutput>();
-            
+            builder.Register<DialoguePresenter>(Lifetime.Scoped);
+
             builder.RegisterComponent(_questView).As<IQuestView>();
-            builder.Register<QuestPresenter>(Lifetime.Scoped).As<IQuestOutput>();
+            builder.Register<QuestPresenter>(Lifetime.Scoped);
         }
 
         private void ConfigureEntryPoints(IContainerBuilder builder)
         {
+            builder.RegisterEntryPoint<InteractionHintHandler>(Lifetime.Scoped);
+            builder.RegisterEntryPoint<ItemInspectionHandler>(Lifetime.Scoped);
+            
+            builder.RegisterEntryPoint<DialogueHandler>(Lifetime.Scoped);
+            builder.RegisterEntryPoint<QuestHandler>(Lifetime.Scoped);
+
             builder.RegisterEntryPoint<GameBootstrapper>();
         }
     }

@@ -3,7 +3,7 @@ using Project.Scripts.Runtime.Features.Interaction.Dialogs;
 
 namespace Project.Scripts.Runtime.UI.Interaction.Dialogs
 {
-    public class DialoguePresenter : IDialogueOutput
+    public class DialoguePresenter
     {
         private readonly IDialogueView _view;
 
