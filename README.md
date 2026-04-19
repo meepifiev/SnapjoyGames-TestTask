@@ -22,14 +22,14 @@
 
 ## Использованные Решения
 
-- `VContainer` используется для dependency injection и composition root.
+- `VContainer` используется для dependency injection.
 - `MessagePipe` используется для передачи событий между системами.
 - `ScriptableObject` используется для конфигураций игрока, предметов, сундука, вентиля, сокетов, NPC и диалогов.
 - `Composite Root` используется в `PlayerRoot`: корневой компонент игрока собирает внутренние части игрока (`PlayerMotor`, `PlayerLook`, `PlayerFocus`, `PlayerViewLock`, `PlayerCursor`) и связывает их с input, interaction и holder-точками.
 - `MVP` применяется для UI: view отвечает за отображение, presenter подготавливает данные, handler слушает сообщения.
 - `Factory` используется для создания объектов.
 - `EntryPoint` приминяется для точки входа.
-- `Assembly Definition` используется для разделения runtime-кода на независимые сборки. Это фиксирует направления зависимостей между слоями и ускоряет перекомпиляцию проекта.
+- `Assembly Definition` используется для разделения runtime-кода на независимые сборки.
 
 ## Реализованные Фичи
 
