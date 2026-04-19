@@ -15,14 +15,9 @@ namespace Project.Scripts.Runtime.Features.Player
             _prefabSettings = prefabSettings ?? throw new ArgumentNullException(nameof(prefabSettings));;
         }
 
-        public PlayerRoot Spawn(Vector3 position, Quaternion rotation)
+        public void Spawn(Vector3 position, Quaternion rotation)
         {
-            PlayerRoot playerRoot = _objectFactory.Create(
-                _prefabSettings.Prefab,
-                position,
-                rotation);
-
-            return playerRoot;
+            _objectFactory.Create(_prefabSettings.Prefab, position, rotation);
         }
     }
 }

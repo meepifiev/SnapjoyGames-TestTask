@@ -1,0 +1,48 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f27d75c11f4c4108b52c15882a2d674b, type: 3}
+  m_Name: GuardNonLinearDialogue
+  m_EditorClassIdentifier: Project.Scripts.Runtime.Features::Project.Scripts.Runtime.Features.Interaction.Dialogs.DialogueDefinition
+  _startNodeIndex: 0
+  _nodes:
+  - _line: "Стоять. Что ищешь в старом хранилище?"
+    _choices:
+    - _text: "Ищу ключ от сундука."
+      _transition:
+        _endsDialogue: 0
+        _nextNodeIndex: 1
+    - _text: "Просто осматриваюсь."
+      _transition:
+        _endsDialogue: 0
+        _nextNodeIndex: 2
+  - _line: "Ключи редко лежат там, где их ждут. Проверь подставки."
+    _choices:
+    - _text: "Спасибо, пойду проверю."
+      _transition:
+        _endsDialogue: 1
+        _nextNodeIndex: 0
+  - _line: "Тогда не крути вентиль без причины. Дверь шумит на весь зал."
+    _choices:
+    - _text: "Понял."
+      _transition:
+        _endsDialogue: 1
+        _nextNodeIndex: 0
+    - _text: "А если причина найдется?"
+      _transition:
+        _endsDialogue: 0
+        _nextNodeIndex: 3
+  - _line: "Тогда крути уверенно и не отпускай раньше времени."
+    _choices:
+    - _text: "Запомню."
+      _transition:
+        _endsDialogue: 1
+        _nextNodeIndex: 0

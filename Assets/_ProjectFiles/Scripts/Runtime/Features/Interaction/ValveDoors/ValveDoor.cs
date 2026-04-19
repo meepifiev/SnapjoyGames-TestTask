@@ -46,9 +46,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.ValveDoors
                    string.IsNullOrWhiteSpace(_settings.RotateInteractionText) == false;
         }
 
-        public void Press(InteractionActor actor)
-        {
-        }
+        public void Press(InteractionActor actor) { }
 
         public void Hold(InteractionActor actor, float deltaTime)
         {
@@ -67,6 +65,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.ValveDoors
         {
             float targetAngle = _settings.MotionSettings.MaxValveAngle;
             float angleStep = _settings.MotionSettings.OpeningSpeed * deltaTime;
+            
             _currentValveAngle = Mathf.MoveTowards(_currentValveAngle, targetAngle, angleStep);
 
             ApplyMotion();

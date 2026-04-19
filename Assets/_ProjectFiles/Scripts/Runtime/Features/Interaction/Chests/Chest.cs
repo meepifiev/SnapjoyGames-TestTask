@@ -12,6 +12,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Chests
 
         private bool _isOpen;
         private bool _isTransitioning;
+        
         private Tween _openTween;
 
         private void OnDestroy()
@@ -40,25 +41,24 @@ namespace Project.Scripts.Runtime.Features.Interaction.Chests
                 return;
 
             PickupItem item = actor.HeldItemSlot.Item;
+            
             actor.HeldItemSlot.Clear();
+            
             item.Consume();
 
             Open();
         }
 
-        public void Hold(InteractionActor actor, float deltaTime)
-        {
-        }
+        public void Hold(InteractionActor actor, float deltaTime) { }
 
-        public void Release(InteractionActor actor)
-        {
-        }
+        public void Release(InteractionActor actor) { }
 
         private void Open()
         {
             _isTransitioning = true;
 
             _openTween?.Kill();
+            
             _openTween = _lid
                 .DOLocalRotate(_settings.LidSettings.OpenLocalEulerAngles, _settings.LidSettings.TransitionDuration)
                 .SetEase(_settings.LidSettings.TransitionEase)

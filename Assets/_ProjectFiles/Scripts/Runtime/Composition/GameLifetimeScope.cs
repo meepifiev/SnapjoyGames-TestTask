@@ -2,13 +2,17 @@ using Project.Scripts.Runtime.Core.Factory;
 using Project.Scripts.Runtime.Core.Input;
 using Project.Scripts.Runtime.Core.Time;
 using Project.Scripts.Runtime.Features.Interaction.Common;
+using Project.Scripts.Runtime.Features.Interaction.Dialogs;
 using Project.Scripts.Runtime.Features.Interaction.Items;
+using Project.Scripts.Runtime.Features.Interaction.Quests;
 using Project.Scripts.Runtime.Features.Player;
 using Project.Scripts.Runtime.Infrastructure.Controls;
 using Project.Scripts.Runtime.Infrastructure.Factory;
 using Project.Scripts.Runtime.Infrastructure.Time;
 using Project.Scripts.Runtime.UI.Interaction;
+using Project.Scripts.Runtime.UI.Interaction.Dialogs;
 using Project.Scripts.Runtime.UI.Interaction.Items;
+using Project.Scripts.Runtime.UI.Interaction.Quests;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -25,6 +29,8 @@ namespace Project.Scripts.Runtime.Composition
         [SerializeField] private InteractionHintSettings _interactionHintSettings;
         [SerializeField] private InteractionHintView _interactionHintView;
         [SerializeField] private ItemInspectionView _itemInspectionView;
+        [SerializeField] private DialogueView _dialogueView;
+        [SerializeField] private QuestView _questView;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -56,10 +62,18 @@ namespace Project.Scripts.Runtime.Composition
         private void ConfigureUI(IContainerBuilder builder)
         {
             builder.RegisterInstance(_interactionHintSettings);
+            
             builder.RegisterComponent(_interactionHintView).As<IInteractionHintView>();
             builder.Register<InteractionHintPresenter>(Lifetime.Scoped).As<IInteractionHintOutput>();
+            
             builder.RegisterComponent(_itemInspectionView).As<IItemInspectionView>();
             builder.Register<ItemInspectionPresenter>(Lifetime.Scoped).As<IItemInspectionOutput>();
+            
+            builder.RegisterComponent(_dialogueView).As<IDialogueView>();
+            builder.Register<DialoguePresenter>(Lifetime.Scoped).As<IDialogueOutput>();
+            
+            builder.RegisterComponent(_questView).As<IQuestView>();
+            builder.Register<QuestPresenter>(Lifetime.Scoped).As<IQuestOutput>();
         }
 
         private void ConfigureEntryPoints(IContainerBuilder builder)

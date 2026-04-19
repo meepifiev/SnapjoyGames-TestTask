@@ -12,11 +12,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         private bool _isInspecting;
         private bool _isTransitioning;
         private bool _isHeld;
-
-        private Transform _initialParent;
-
-        private Vector3 _initialLocalPosition;
-        private Quaternion _initialLocalRotation;
+        
         private Vector3 _initialLocalScale;
 
         private bool _initialIsKinematic;
@@ -30,6 +26,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         private ItemSocket _socket;
 
         public ItemDefinition Definition => _definition;
+        
         public bool CanPlaceInSocket => _isHeld && _isTransitioning == false;
 
         private void Awake()
@@ -72,13 +69,9 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
             StartInspection(actor);
         }
 
-        public void Hold(InteractionActor actor, float deltaTime)
-        {
-        }
+        public void Hold(InteractionActor actor, float deltaTime) { }
 
-        public void Release(InteractionActor actor)
-        {
-        }
+        public void Release(InteractionActor actor) { }
 
         private void StartInspection(InteractionActor actor)
         {
@@ -86,6 +79,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
             
             actor.ViewLock.LockMovement();
             actor.ViewLock.LockLook();
+            actor.Cursor.RequestVisible();
             actor.ItemInspectionOutput.Show(_definition);
             
             SaveInitialPose();
@@ -147,9 +141,6 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
 
         private void SaveInitialPose()
         {
-            _initialParent = transform.parent;
-            _initialLocalPosition = transform.localPosition;
-            _initialLocalRotation = transform.localRotation;
             _initialLocalScale = transform.localScale;
         }
 
@@ -174,6 +165,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
                 _definition.HeldSettings.LocalScale,
                 () =>
                 {
+                    actor.Cursor.ReleaseVisible();
                     actor.ViewLock.UnlockLook();
                     actor.ViewLock.UnlockMovement();
                 },

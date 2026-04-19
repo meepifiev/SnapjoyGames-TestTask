@@ -2,7 +2,9 @@ using System;
 using Project.Scripts.Runtime.Core.Input;
 using Project.Scripts.Runtime.Core.Time;
 using Project.Scripts.Runtime.Features.Interaction.Common;
+using Project.Scripts.Runtime.Features.Interaction.Dialogs;
 using Project.Scripts.Runtime.Features.Interaction.Items;
+using Project.Scripts.Runtime.Features.Interaction.Quests;
 using UnityEngine;
 using VContainer;
 
@@ -25,6 +27,7 @@ namespace Project.Scripts.Runtime.Features.Player
         private PlayerMotor _motor;
         private PlayerLook _look;
         private PlayerFocus _focus;
+        private PlayerCursor _cursor;
         private HeldItemSlot _heldItemSlot;
 
         [Inject]
@@ -32,12 +35,15 @@ namespace Project.Scripts.Runtime.Features.Player
             IInputReader inputReader,
             ITimeProvider timeProvider,
             IInteractionHintOutput interactionHintOutput,
+            IDialogueOutput dialogueOutput,
+            IQuestOutput questOutput,
             IItemInspectionOutput itemInspectionOutput)
         {
             _inputReader = inputReader ?? throw new ArgumentNullException(nameof(inputReader));
             _timeProvider = timeProvider ?? throw new ArgumentNullException(nameof(timeProvider));
 
             _viewLock = new PlayerViewLock();
+            _cursor = new PlayerCursor(_settings);
             _heldItemSlot = new HeldItemSlot();
             _motor = new PlayerMotor(_characterController, _body, _settings, _viewLock);
             _look = new PlayerLook(_body, _camera, _settings, _viewLock);
@@ -45,25 +51,27 @@ namespace Project.Scripts.Runtime.Features.Player
             _focus = new PlayerFocus(
                 _camera,
                 new InteractionActor(
-                    _body,
                     _camera,
                     _itemInspectionHolder,
                     _heldItemHolder,
                     _heldItemSlot,
                     _viewLock,
+                    _cursor,
                     _inputReader,
                     _timeProvider,
+                    dialogueOutput,
+                    questOutput,
                     itemInspectionOutput),
-                _interactionSettings,
-                _viewLock,
-                interactionHintOutput);
+                    _interactionSettings,
+                    _viewLock,
+                    interactionHintOutput);
 
             _inputReader.MoveChanged += _motor.SetMoveInput;
             _inputReader.LookChanged += _look.SetLookInput;
 
             _focus.Subscribe(_inputReader);
 
-            ApplyCursorState();
+            _cursor.ApplyDefaultState();
         }
 
         private void Update()
@@ -83,15 +91,6 @@ namespace Project.Scripts.Runtime.Features.Player
             _inputReader.LookChanged -= _look.SetLookInput;
 
             _focus.Unsubscribe(_inputReader);
-        }
-
-        private void ApplyCursorState()
-        {
-            if (_settings.DefaultLockCursor == false)
-                return;
-
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
         }
     }
 }
