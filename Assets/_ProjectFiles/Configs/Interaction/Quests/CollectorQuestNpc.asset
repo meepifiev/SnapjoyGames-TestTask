@@ -1,0 +1,31 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43e41d989ba94ddcada9e228bd0d0f86, type: 3}
+  m_Name: CollectorQuestNpc
+  m_EditorClassIdentifier: Project.Scripts.Runtime.Features::Project.Scripts.Runtime.Features.Interaction.Quests.QuestNpcDefinition
+  <DisplayName>k__BackingField: "Собиратель"
+  <InteractionText>k__BackingField: "Разговор"
+  <CompleteInteractionText>k__BackingField: "Отдать"
+  <Lines>k__BackingField:
+  - "Я проверяю, все ли вещи в зале на месте."
+  - "Мне нужен один предмет для сверки."
+  - "Принеси мне {0}, а я отмечу задание выполненным."
+  <ContinueChoiceText>k__BackingField: "Дальше"
+  <AcceptQuestChoiceText>k__BackingField: "Что принести?"
+  <NoItemLine>k__BackingField: "Похоже, подходящих предметов сейчас нет."
+  <MissingItemLine>k__BackingField: "Это не тот предмет. Посмотри внимательнее."
+  <CompleteLine>k__BackingField: "Да, это он. Спасибо."
+  <CloseChoiceText>k__BackingField: "Закрыть"
+  <QuestDescriptionFormat>k__BackingField: "Принести: {0}"
+  <ExcludedItemTypes>k__BackingField:
+  - 1
+  - 2
