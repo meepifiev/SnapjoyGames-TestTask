@@ -14,9 +14,6 @@ namespace Project.Scripts.Runtime.UI.Interaction.Items
 
         public void Show(ItemDefinition definition)
         {
-            if (definition == null)
-                throw new ArgumentNullException(nameof(definition));
-
             _view.Show(definition.DisplayName, definition.Description);
         }
 

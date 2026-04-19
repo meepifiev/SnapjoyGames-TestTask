@@ -43,6 +43,7 @@ namespace Project.Scripts.Runtime.Features.Player
             _heldItemSlot = new HeldItemSlot();
             _motor = new PlayerMotor(_characterController, _body, _settings, _viewLock);
             _look = new PlayerLook(_body, _camera, _settings, _viewLock);
+            
             _focus = new PlayerFocus(
                 _camera,
                 new InteractionActor(

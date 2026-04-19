@@ -23,6 +23,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         private bool _initialUseGravity;
 
         private Tween _transitionTween;
+        
         private InspectableItemRotation _rotation;
 
         public ItemDefinition Definition => _definition;
@@ -43,11 +44,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
 
         public bool CanInteract(InteractionActor actor)
         {
-            return _definition != null &&
-                   _rigidbody != null &&
-                   _definition.InspectionSettings != null &&
-                   _definition.HeldSettings != null &&
-                   _isHeld == false &&
+            return _isHeld == false &&
                    (_isInspecting || actor.HeldItemSlot.HasItem == false) &&
                    HasAvailableInteractionText();
         }
@@ -77,12 +74,16 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         private void StartInspection(InteractionActor actor)
         {
             _isInspecting = true;
+            
             actor.ViewLock.LockMovement();
             actor.ViewLock.LockLook();
             actor.ItemInspectionOutput.Show(_definition);
+            
             SaveInitialPose();
+            
             SaveRigidbodyState();
             SetInspectionRigidbodyState();
+            
             EnableRotation(actor);
             MoveToInspectionPose(actor.ItemInspectionHolder);
         }
@@ -94,8 +95,10 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
 
             _isInspecting = false;
             _isHeld = true;
+            
             actor.HeldItemSlot.Hold(this);
             actor.ItemInspectionOutput.Hide();
+            
             DisableRotation();
             MoveToHeldPose(actor);
         }

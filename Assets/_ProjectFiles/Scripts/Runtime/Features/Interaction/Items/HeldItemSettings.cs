@@ -1,16 +1,15 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 
 namespace Project.Scripts.Runtime.Features.Interaction.Items
 {
-    [System.Serializable]
+    [Serializable]
     public class HeldItemSettings
     {
-        private const float MinTransitionDuration = 0f;
-
         [SerializeField] private Vector3 _localEulerAngles;
         [SerializeField] private Vector3 _localScale = Vector3.one;
-        [SerializeField, Min(MinTransitionDuration)] private float _transitionDuration;
+        [SerializeField, Min(0)] private float _transitionDuration;
         [SerializeField] private Ease _transitionEase;
 
         public Vector3 LocalEulerAngles => _localEulerAngles;

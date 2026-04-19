@@ -8,6 +8,7 @@ namespace Project.Scripts.Runtime.Features.Interaction.Items
         private readonly Transform _target;
         private readonly Transform _rotationFrame;
         private readonly IInputReader _inputReader;
+        
         private readonly float _rotationSpeed;
 
         private bool _isEnabled;
